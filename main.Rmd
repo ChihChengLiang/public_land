@@ -5,9 +5,7 @@ date: "2015年08月21日"
 output: html_document
 ---
 
-```{r}
-# library(gdata)
-# data = read.xls("台北市公有土地且位於可建築分區而未有建築物登記的土地資料.xlsx",sheet = 3)
+```{r,eval=FALSE}
 
 download.file("http://data.g0v.tw/node/71/download",destfile = "land.xlsx")
 
@@ -18,3 +16,31 @@ colnames(data)<-c("owner", "admin", "dist", "road", "id", "area", "denom", "nomi
 str(data)
 write.csv(data, file = "land.csv")
 ```
+
+
+# Read the data
+
+```{r}
+f = read.csv("land.csv")
+
+```
+
+# Simple analysis
+
+```{r}
+library(dplyr)
+```
+
+## Q1: How much area does a admin own?
+
+```{r}
+Q1= summarise(group_by(f, admin), total= sum(area))
+Q1_sorted = arrange(Q1,desc(total))
+```
+
+```{r,eval=FALSE}
+write.csv(Q1, file="area_by_admin.csv")
+library(jsonlite)
+write(jsonlite::toJSON(Q1),"area_by_admin.json")
+```
+
