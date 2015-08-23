@@ -1,0 +1,20 @@
+---
+title: "land"
+author: "chihchengliang"
+date: "2015年08月21日"
+output: html_document
+---
+
+```{r}
+# library(gdata)
+# data = read.xls("台北市公有土地且位於可建築分區而未有建築物登記的土地資料.xlsx",sheet = 3)
+
+download.file("http://data.g0v.tw/node/71/download",destfile = "land.xlsx")
+
+library(xlsx)
+data = xlsx::read.xlsx2(file = "land.xlsx",sheetIndex = 3,colIndex = c(1:10),endRow = 14035, header = T, colClasses="character")
+
+colnames(data)<-c("owner", "admin", "dist", "road", "id", "area", "denom", "nomin","holding_area", "type")
+str(data)
+write.csv(data, file = "land.csv")
+```
